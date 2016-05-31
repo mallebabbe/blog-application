@@ -67,7 +67,6 @@ app.get('/', function (request, response) {
 		user: request.session.user
 	});
 });
-
 // #### REGISTER #### FORM ON HOME-PAGE POST
 app.post('/create-user', function (request, response) {
 // take the input fields from the register form and save it to the DB as new user
@@ -77,46 +76,27 @@ User.create({
 	email: request.body.useremail,
 	password: request.body.userpassword
 })
-console.log("User : " + request.body.username + " is created")
+console.log("Registration for " + request.body.username + " succeded")
 	response.redirect('/');
 })
-
 // ##### LOGIN ##### FORM ON HOME-PAGE POST
 app.post('/login-user', bodyParser.urlencoded({extended: true}), function (request, response) {
-	console.log("Login reached")
-	if(request.body.loginUserName === 0) {
-		response.redirect('/?message=' + encodeURIComponent("Please fill out your username."));
-		return;
-	}
-	if(request.body.loginUserPassword.length === 0) {
-		response.redirect('/?message=' + encodeURIComponent("Please fill out your password."));
-		return;
-	}
 	User.findOne({
 		where: {
 			name: request.body.loginUserName
 		}
 	}).then(function (user) {
-		if (user !== null && request.body.password === user.password) {
+	console.log("Login match made for " + request.body.loginUserName)
+		if (user !== null && request.body.loginUserPassword === user.password) {
 			request.session.user = user;
 			response.redirect('/profile');
 		} else {
-			response.redirect('/?message=' + encodeURIComponent("Invalid email or password."));
+			response.redirect('/?message=' + encodeURIComponent("TRIED LOGIN -> Invalid email or password."));
 		}
 	}, function (error) {
-		response.redirect('/?message=' + encodeURIComponent("Invalid email or password."));
+		response.redirect('/?message=' + encodeURIComponent("Error -> Invalid email or password."));
 	});
 });
-
-
-
-
-
-
-
-
-
-
 
 
 // ###### LOG-OUT ######

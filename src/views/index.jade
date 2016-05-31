@@ -8,7 +8,7 @@ html
 		script.
 			$(document).ready(function () {
 				$('#submit').click(function(event) {
-					if($('#email').val().trim().length === 0 || $('#password').val().trim().length === 0) {
+					if($('#name').val().trim().length === 0 || $('#password').val().trim().length === 0) {
 						event.preventDefault();
 						$('#error-message').html("Your username or password is empty.");
 					}
@@ -22,8 +22,9 @@ html
 						li
 							a(class=['logo'], href='/') Blog Application
 							a(href='http://localhost:3000/profile') profile
-							br
 							a(href='http://localhost:3000/logout') log out
+			h2 Error message:
+			h2#error-message= message
 		else
 			#navbar-fixed
 				#nav-wrapper
@@ -53,8 +54,6 @@ html
 				input(type='submit' value='register and login' id='submit')
 			br
 			br
-			br
-			br
 			h2 LOGIN here
 			br
 			form(action='/login-user' method='post')
@@ -67,4 +66,6 @@ html
 				input#password(name='loginUserPassword' required)
 				br
 				input(type='submit' value='login' id='submit')
+		br
+		h2 Error message:
 		h2#error-message= message
