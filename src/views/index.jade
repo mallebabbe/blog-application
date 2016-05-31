@@ -1,29 +1,70 @@
-extends layout
-
-block content
-	if user
-		#navbar-fixed
-			#nav-wrapper
-				ul
-					li
-						a(class=['logo'], href='/') Blog Application
-						a(href='http://localhost:3000/profile') profile
-						br
-						a(href='http://localhost:3000/logout') log out
-	else
-		#navbar-fixed
-			#nav-wrapper
-				ul
-					li
-						a(class=['logo'], href='/') Blog Application
-						a(href='http://localhost:3000/login') login
+doctype html
+html
+	head
+		title= title
+		link(rel='stylesheet', href='/style.css', type='text/css')
+		link(href='https://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet' type='text/css')
+		script(src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
+		script.
+			$(document).ready(function () {
+				$('#submit').click(function(event) {
+					if($('#email').val().trim().length === 0 || $('#password').val().trim().length === 0) {
+						event.preventDefault();
+						$('#error-message').html("Your username or password is empty.");
+					}
+				});
+			});
+	body
+		if user
+			#navbar-fixed
+				#nav-wrapper
+					ul
+						li
+							a(class=['logo'], href='/') Blog Application
+							a(href='http://localhost:3000/profile') profile
 							br
-							br
-							form(action='/login' method='post')
-							label name
-							input#name(name='username' required)
-							label email
-							input#email(name='email' required)
-							label password
-							input#password(name='password' required)
-							input(type='submit' value='login' id='submit')
+							a(href='http://localhost:3000/logout') log out
+		else
+			#navbar-fixed
+				#nav-wrapper
+					ul
+						li
+							a(class=['logo'], href='/') Blog Application
+							a(href='http://localhost:3000/login') login
+			br
+			br
+			br
+			br
+			h2 REGISTER here
+			br
+			form(action='/create-user' method='post')
+				label name
+				br
+				input#name(name='username' required)
+				br
+				label email
+				br
+				input#email(name='useremail' required)
+				br
+				label password
+				br
+				input#password(name='userpassword' required)
+				br
+				input(type='submit' value='register and login' id='submit')
+			br
+			br
+			br
+			br
+			h2 LOGIN here
+			br
+			form(action='/login-user' method='post')
+				label name
+				br
+				input#name(name='loginUserName' required)
+				br
+				label password
+				br
+				input#password(name='loginUserPassword' required)
+				br
+				input(type='submit' value='login' id='submit')
+		h2#error-message= message

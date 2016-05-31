@@ -19,19 +19,21 @@ var User = sequelize.define('users', {
 });
 var Post = sequelize.define('posts', {
 	title: Sequelize.STRING,
-	body: Sequelize.STRING
+	body: Sequelize.TEXT
 })
 var Comment = sequelize.define('comments', {
-	body: Sequelize.STRING
+	body: Sequelize.TEXT
 })
 // ######### END DB TABLES ##########
 // ######### SET TABLE CONNECTIONS ########
-users.hasMany(posts);
-posts.belongsTo(users);
-users.hasMany(comments)
-posts.hasMany(comments)
-comments.belongsTo(users)
-comments.belongsTo(posts)
+User.hasMany(Post);
+Post.belongsTo(User);
+User.hasMany(Comment)
+Post.hasMany(Comment)
+Comment.belongsTo(User)
+Comment.belongsTo(Post)
+// test
+console.log("table connections made")
 // ######### END TABLE CONNECTIONS ########
 
 // ###### EXPRESS INSTANCE ######
@@ -41,57 +43,58 @@ var app = express();
 app.set('views', './src/views');
 app.set('view engine', 'jade');
 
+// use the css and js files from public
+app.use(express.static('./public/css'));
+app.use(express.static('./public/js'));
 
+app.use(bodyParser.urlencoded({ extended:true }))
 
-// ???????????????????????????????????????????????
-// app.use(session({
-// 	secret: 'oh wow very secret much security',
-// 	resave: true,
-// 	saveUninitialized: false
-// }));
-
+// #### SESSION ####
+app.use(session({
+	secret: 'oh wow very secret much security',
+	resave: true,
+	saveUninitialized: false
+}));
 
 // ######## ROUTES ########
 
-// LISTEN TO INDEX
+// ###### INDEX ######
+// GET HOME-PAGE
 app.get('/', function (request, response) {
 	response.render('index', {
-	//localhost:3000/?message=hello -> sets message to hello
 		title: 'Blog Application',
 		message: request.query.message,
 		user: request.session.user
 	});
 });
 
+// #### REGISTER #### FORM ON HOME-PAGE POST
+app.post('/create-user', function (request, response) {
+// take the input fields from the register form and save it to the DB as new user
+console.log("Create user : " + request.body.username)
+User.create({
+	name: request.body.username,
+	email: request.body.useremail,
+	password: request.body.userpassword
+})
+console.log("User : " + request.body.username + " is created")
+	response.redirect('/');
+})
 
-//
-
-app.get('/profile', function (request, response) {
-	var user = request.session.user;
-	if (user === undefined) {
-		response.redirect('/?message=' + encodeURIComponent("Please log in to view your profile."));
-	} else {
-		response.render('profile', {
-			title: 'Profile',
-			user: user
-		});
-	}
-});
-
-app.post('/login', bodyParser.urlencoded({extended: true}), function (request, response) {
-	if(request.body.email.length === 0) {
-		response.redirect('/?message=' + encodeURIComponent("Please fill out your email address."));
+// ##### LOGIN ##### FORM ON HOME-PAGE POST
+app.post('/login-user', bodyParser.urlencoded({extended: true}), function (request, response) {
+	console.log("Login reached")
+	if(request.body.loginUserName === 0) {
+		response.redirect('/?message=' + encodeURIComponent("Please fill out your username."));
 		return;
 	}
-
-	if(request.body.password.length === 0) {
+	if(request.body.loginUserPassword.length === 0) {
 		response.redirect('/?message=' + encodeURIComponent("Please fill out your password."));
 		return;
 	}
-
 	User.findOne({
 		where: {
-			email: request.body.email
+			name: request.body.loginUserName
 		}
 	}).then(function (user) {
 		if (user !== null && request.body.password === user.password) {
@@ -105,6 +108,18 @@ app.post('/login', bodyParser.urlencoded({extended: true}), function (request, r
 	});
 });
 
+
+
+
+
+
+
+
+
+
+
+
+// ###### LOG-OUT ######
 app.get('/logout', function (request, response) {
 	request.session.destroy(function(error) {
 		if(error) {
@@ -114,26 +129,70 @@ app.get('/logout', function (request, response) {
 	})
 });
 
-// ########### END ROUTE SECTION #############
+// ###### PROFILE ######
+app.get('/profile', function (request, response) {
+	var user = request.session.user;
+	if (user === undefined) {
+		response.redirect('/?message=' + encodeURIComponent("Please log in to view your profile."));
+	} else {
+		response.render('profile', {
+			title: 'Profile',
+			user: user
+		});
+	}
+});
 
+// SEARCH FOR SPECIFIC POST in DB
+app.post('/api', function ( req, res ){
+	
+	var searchPost = req.body.userNameSearch.toLowerCase()
+	console.log("Letter found ==> " + searchName)
 
+	var userMatch = {}
+	var totalUsers = []
 
-// normally never use the force:true // 
-// sequelize.sync({force: true}).then(function () {
-// 	User.create({
-// 		name: "stabbins",
-// 		email: "yes@no",
-// 		password: "not_password"
-// 	}).then(function () {
-// 		var server = app.listen(3000, function () {
-// 			console.log('Example app listening on port: ' + server.address().port);
-// 		});
-// 	});
-// }, function (error) {
-// 	console.log('sync failed: ');
-// 	console.log(error);
+	jsonREADER.readJSON('./resources/users.json', function ( jsonData, name ) {
+		console.log("Search string received" )
+
+		for (var i = 0; i < jsonData.length; i++) {
+
+			var achternaam = jsonData[i].lastname.toLowerCase()
+			var voornaam = jsonData[i].firstname.toLowerCase()
+			var fullName = voornaam + " " + achternaam
+			letterMatchFirstName = voornaam.indexOf(searchName)
+			letterMatchLastName = achternaam.indexOf(searchName)
+			letterMatchFullName = fullName.indexOf(searchName)
+
+		// console.log("Letters found : " + letterMatchFirstName)
+
+			if(letterMatchFirstName != -1 || letterMatchLastName != -1 || letterMatchFullName != -1) {
+				userMatch = jsonData[i]
+				totalUsers.push(userMatch)
+				// console.log("total name : " + userMatch)
+			} 
+		}
+		res.send(totalUsers)
+	})	
+})
+
+// app.get('/all-posts', function ( request, response ) {
+
+// 	User.findAll({
+// 	include: [Post]
+// }).then(function(result) {
+// 	console.log("\n\nresult of: People including Messages");
+// 	console.log(JSON.stringify(result, null, 2)); // note: the other parameters in JSON.stringify format the output so that it is easier to read.
 // });
 
+// Post.findAll({
+// 	include: [User]
+// }).then(function(result) {
+// 	console.log("\n\nresult of: Messages including People");
+// 	console.log(JSON.stringify(result, null, 2));
+// });
+// })
+
+// ########### END ROUTE SECTION #############
 
 // ####### SERVER LISTEN TO PORT 3000 ########
 var server = app.listen(3000, function () {

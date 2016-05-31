@@ -24,6 +24,7 @@
     "body-parser": "^1.15.1",
     "express": "^4.13.4",
     "express-session": "^1.13.0",
+    "jade": "^1.11.0",
     "nodemon": "^1.9.2",
     "pg": "^4.5.5",
     "promise": "^7.1.1",
