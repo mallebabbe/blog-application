@@ -1,0 +1,29 @@
+extends layout
+
+block content
+	if user
+		#navbar-fixed
+			#nav-wrapper
+				ul
+					li
+						a(class=['logo'], href='/') Blog Application
+						a(href='http://localhost:3000/profile') profile
+						br
+						a(href='http://localhost:3000/logout') log out
+	else
+		#navbar-fixed
+			#nav-wrapper
+				ul
+					li
+						a(class=['logo'], href='/') Blog Application
+						a(href='http://localhost:3000/login') login
+							br
+							br
+							form(action='/login' method='post')
+							label name
+							input#name(name='username' required)
+							label email
+							input#email(name='email' required)
+							label password
+							input#password(name='password' required)
+							input(type='submit' value='login' id='submit')

@@ -1,0 +1,161 @@
+1 create folder and file structure
+	folder: public, resources, src
+2 install modules: 
+	sequelize, express, pug, body-parser, pg, promise, express-session, nodemon
+3 require modules in the app.js
+
+4 set node.js essentials
+	listen to port 3000
+	view engine jade
+	set new sequelize DB connection
+
+
+5 DB structure with 3 tables
+	var Person = table: users have: 	id 		SPK, 
+										name 	TEXT, 
+										email 	TEXT 
+	var Article = table: posts have: 	id 		SPK, 
+										title 	TEXT, 
+										body 	TEXT,
+										id FROM USERS				
+	var Message = table: comments have: id 		SPK, 
+										body 	TEXT,
+										id FROM users
+										id FROM post,
+SET CONNECTIONS
+	users.hasMany(posts);
+	posts.belongsTo(users);
+	users.hasMany(comments)
+	blogs.hasMany(comments)
+	comments.belongsTo(users)
+	comments.belongsTo(posts)
+
+6 ROUTES & JADE PAGES
+
+INDEX
+	app.get 	LISTEN TO 	/index 	 
+						JADE:	display	
+									if user
+										nav to 	/profile 
+												/logout
+												/index
+									else 
+										nav to 	/login
+												/index
+										form action=/create-user 
+											username 
+											email
+											password
+											submit goes to =/login
+	app.post 	LISTEN TO	/create-user 	
+							->form query 
+								if
+								store username + email + password to DB
+							->redirects /login
+LOGIN
+	app.get		LISTEN TO 	/login
+						JADE:	login form with username + password fields
+						NODE:	findOne user
+								 	if 
+								 		user matches with one in DB,
+									else: 
+										error - show error message to user in JADE
+									.then - compare 
+									if
+										req.body.username == user !-- null && req.body.password == user.password
+									NEXT: ->redirect to /profile
+									else
+										error -show error message to user in JADE
+LOGOUT
+	app.get		LISTEN TO 	/logout
+						JADE:	
+
+						NODE:	destroy session
+								redirect to /index
+PROFILE
+	app.get		LISTEN TO 	/profile
+						JADE:	display
+									navbar to 	/create-post
+												/view-all-posts
+												/view-own-posts
+									form
+										search
+										submit
+						NODE:	search posts + author
+	post/api 	LISTEN TO 	/search
+								searches DB for 
+									post.author 
+									post.title
+POSTS
+CREATE-POST
+	app.get		LISTEN TO 	/create-post
+						JADE: 	display
+									form 
+										title 
+										body 
+										submit goes to /own-posts
+	app.post 	LISTEN TO 	/create-post
+						NODE: 	store title + body + user id to DB
+								redirect to /own-posts				
+VIEW-OWN-POSTS
+	app.get		LISTEN TO 	/view-own-posts
+						JADE:	display
+									render all posts {user: ID, title:title, body:body}
+									latest post first
+									form for comment
+										body + 
+										submit goes to /view-own-posts
+						NODE:	get all posts from DB 
+									title
+									body 
+									author
+	app.post 	LISTEN TO 	/post-comment
+						NODE:	match user id to post id
+									match comment id to post id
+									store to DB
+								redirect to /own-posts
+VIEW-ALL-POSTS
+	app.get 	LISTEN TO 	/view-all-posts
+						JADE:	display
+									all posts
+									form comment to post body + submit to /all-posts
+						NODE:	
+	app.post 	LISTEN TO 	/post-comment	
+								store to DB 
+									user id, 
+
+################### END OF GAMEPLAN #######################
+
+
+#### NOTES ####
+create pages in jade with navbar. 
+	index page navbar -> 	if user -> 	profile + 
+										logout
+							else -> 	login + 
+										register
+	profile page navbar -> 	create post + 
+							view and comment own posts + 
+							view and comment all posts + 
+							search for specific post (author & title) with comments 
+
+
+search function, include from userinfo app
+
+
+
+
+
+
+Project Specification
+Create a blogging application that allows users to do the following:
+- register an account
+- login
+- logout
+
+Once logged in, a user should be able to:
+- create a post
+- view a list of their own posts
+- view a list of everyone's posts
+- view a specific post, including the comments people have made about it
+- leave a comment on a post
+
