@@ -1,0 +1,14 @@
+extends layout
+block content
+	p #{user.name} likes to see his own online posts.
+	#posts
+	each post in data 
+		#single
+			h2#oneTitle Title: #{post.title}
+			p#oneBody #{post.body}
+		form(name="Comment", action="/commentOnPost", method="post")
+			div.text3
+				span.label Comment
+				input(id='commentfield', type="text", name="commentfield")
+				div.actions
+					input(type="submit", value="comment")

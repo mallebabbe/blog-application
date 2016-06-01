@@ -6,9 +6,9 @@ var session = require('express-session');
 // ######### SET DB CONNECTION
 var sequelize = new Sequelize('blog', 'postgres', 'mysecretpassword', {
 	host: '192.168.99.100',
-// port changes everytime I restart Docker
-	port:'32771', 
-	dialect: 'postgres'
+// note: port changes everytime I restart Docker
+port:'32768', 
+dialect: 'postgres'
 });
 
 // ######### SET DB TABLES ########## 
@@ -32,10 +32,11 @@ User.hasMany(Comment)
 Post.hasMany(Comment)
 Comment.belongsTo(User)
 Comment.belongsTo(Post)
-// test
-console.log("table connections made")
-// ######### END TABLE CONNECTIONS ########
 
+// ######### END TABLE CONNECTIONS ########
+// sequelize.sync({force: true}).then(function( ){
+
+// })
 // ###### EXPRESS INSTANCE ######
 var app = express();
 
@@ -62,7 +63,7 @@ app.use(session({
 // GET HOME-PAGE
 app.get('/', function (request, response) {
 	response.render('index', {
-		title: 'Blog Application',
+		titleHead: 'Blog Application',
 		message: request.query.message,
 		user: request.session.user
 	});
@@ -77,7 +78,7 @@ User.create({
 	password: request.body.userpassword
 })
 console.log("Registration for " + request.body.username + " succeded")
-	response.redirect('/');
+response.redirect('/');
 })
 // ##### LOGIN ##### FORM ON HOME-PAGE POST
 app.post('/login-user', bodyParser.urlencoded({extended: true}), function (request, response) {
@@ -86,7 +87,7 @@ app.post('/login-user', bodyParser.urlencoded({extended: true}), function (reque
 			name: request.body.loginUserName
 		}
 	}).then(function (user) {
-	console.log("Login match made for " + request.body.loginUserName)
+		console.log("Login match made for " + request.body.loginUserName)
 		if (user !== null && request.body.loginUserPassword === user.password) {
 			request.session.user = user;
 			response.redirect('/profile');
@@ -111,70 +112,194 @@ app.get('/logout', function (request, response) {
 
 // ###### PROFILE ######
 app.get('/profile', function (request, response) {
+	console.log("LANDED on PROFILE")
 	var user = request.session.user;
 	if (user === undefined) {
 		response.redirect('/?message=' + encodeURIComponent("Please log in to view your profile."));
 	} else {
 		response.render('profile', {
-			title: 'Profile',
+			titleHead: 'Profile',
 			user: user
 		});
 	}
 });
-
-// SEARCH FOR SPECIFIC POST in DB
-app.post('/api', function ( req, res ){
+// #### CREATE POST ####
+app.get('/create-post', function (request, response) {
+	console.log("LANDED ON CREATE POST")
+	var user = request.session.user;
+	if (user === undefined) {
+		response.redirect('/?message=' + encodeURIComponent("Please log in to view your profile."));
+	} else {
+		response.render('create-post', {
+			titleHead: 'Create New Post',
+			user: user
+		});
+	}
+})
+app.post('/post-post', function (request, response) {
+	console.log("post on the way")
+	var restoredUser = User.build(request.session.user);
+	restoredUser.createPost({
+		title: request.body.titlePost,
+		body: request.body.bodyPost
+	})
 	
-	var searchPost = req.body.userNameSearch.toLowerCase()
-	console.log("Letter found ==> " + searchName)
+	response.redirect('/profile')
+})
+// #### VIEW ALL POSTS ####
+app.get('/view-all-posts', function (request, response) {
+	console.log("LANDED ON VIEW ALL")
+	var user = request.session.user;
+	
+	if (user === undefined) {
+		response.redirect('/?message=' + encodeURIComponent("Please log in to view your profile."));
+	} else {
+		Post.findAll().then(function (posts) {
+			var data = posts.map(function (post) {
+				return {
+					title: post.dataValues.title,
+					body: post.dataValues.body
+				};
+			})
+			
 
-	var userMatch = {}
-	var totalUsers = []
+			console.log("Page Gets Rendered");
+			
 
-	jsonREADER.readJSON('./resources/users.json', function ( jsonData, name ) {
-		console.log("Search string received" )
+			response.render('view-all-posts', {
+				titleHead: 'View All Posts',
+				data: data,
+				user: user
+			})
+		})
+	}
 
-		for (var i = 0; i < jsonData.length; i++) {
 
-			var achternaam = jsonData[i].lastname.toLowerCase()
-			var voornaam = jsonData[i].firstname.toLowerCase()
-			var fullName = voornaam + " " + achternaam
-			letterMatchFirstName = voornaam.indexOf(searchName)
-			letterMatchLastName = achternaam.indexOf(searchName)
-			letterMatchFullName = fullName.indexOf(searchName)
 
-		// console.log("Letters found : " + letterMatchFirstName)
+// var restoredUser = User.build(request.session.user);
+// 	restoredUser.createComment({
+// 		title: request.body.titlePost,
+// 		body: request.body.bodyPost
+// 	})
+});
 
-			if(letterMatchFirstName != -1 || letterMatchLastName != -1 || letterMatchFullName != -1) {
-				userMatch = jsonData[i]
-				totalUsers.push(userMatch)
-				// console.log("total name : " + userMatch)
-			} 
-		}
-		res.send(totalUsers)
-	})	
+
+// #### VIEW OWN POSTS ####
+app.get('/view-own-posts', function (request, response) {
+	console.log("LANDED ON VIEW OWN")
+
+	var user = request.session.user;
+
+	console.log(user)
+	if (user === undefined) {
+		response.redirect('/?message=' + encodeURIComponent("Please log in to view your profile."));
+	} else {
+		Post.findAll({
+			where: {
+				userId: user.id
+			}			
+		}).then(function (posts) {
+			var data = posts.map(function (post) {
+				return {
+					title: post.dataValues.title,
+					body: post.dataValues.body
+				};
+			})
+			console.log("printing results:");
+			console.log(data);
+			response.render('view-own-posts', {
+				titleHead: 'View OWN Posts',
+				data: data,
+				user: user
+			})
+		})
+	}
 })
 
-// app.get('/all-posts', function ( request, response ) {
+app.post('/commentPost', function (request, response) {
+	
+	console.log("COMMENT on the way")
+	console.log("user")
+	var restoredUser = User.build(request.session.user);
+	
+	restoredUser.createComment({
+		body: request.body.commentfield
+	})
+	
+	console.log("hello")
+	
+	response.redirect('/profile')
 
-// 	User.findAll({
-// 	include: [Post]
-// }).then(function(result) {
-// 	console.log("\n\nresult of: People including Messages");
-// 	console.log(JSON.stringify(result, null, 2)); // note: the other parameters in JSON.stringify format the output so that it is easier to read.
-// });
+})
+// #### SEARCH FOR SPECIFIC POST in DB ####
+app.post('/api', function ( req, res ){
+	
+	Post.findOne({
+// where:    you select a DB element that matches title:'birds are chirpy' 
+	where: {
+		title: request.body.Search
+	}
+	// now we have this message 
+}).then(function (post) {
+	post.update({
+		title: 'birds are REALLY chirpy',
+		body: 'for real yo'
+	});
+});
+	// var searchPost = req.body.searchPost.toLowerCase()
+	// console.log("post found : " + searchPost)
 
-// Post.findAll({
-// 	include: [User]
-// }).then(function(result) {
-// 	console.log("\n\nresult of: Messages including People");
-// 	console.log(JSON.stringify(result, null, 2));
-// });
-// })
+	// var userMatch = {}
+	// var totalUsers = []
+
+	// jsonREADER.readJSON('./resources/users.json', function ( jsonData, name ) {
+	// 	console.log("Search string received" )
+
+	// 	for (var i = 0; i < jsonData.length; i++) {
+
+	// 		var achternaam = jsonData[i].lastname.toLowerCase()
+	// 		var voornaam = jsonData[i].firstname.toLowerCase()
+	// 		var fullName = voornaam + " " + achternaam
+	// 		letterMatchFirstName = voornaam.indexOf(searchName)
+	// 		letterMatchLastName = achternaam.indexOf(searchName)
+	// 		letterMatchFullName = fullName.indexOf(searchName)
+
+	// 	// console.log("Letters found : " + letterMatchFirstName)
+
+	// 		if(letterMatchFirstName != -1 || letterMatchLastName != -1 || letterMatchFullName != -1) {
+	// 			userMatch = jsonData[i]
+	// 			totalUsers.push(userMatch)
+	// 			// console.log("total name : " + userMatch)
+	// 		} 
+	// 	}
+	// 	res.send(totalUsers)
+	// })	
+})
 
 // ########### END ROUTE SECTION #############
 
+// ######## RESTORE TABLES SECTION ########
+// sequelize.sync({force: true}).then(function () {
+// 	User.create({
+// 		name: "jeez",
+// 		email: "jezus@gmail.com",
+// 		password: "jeez"
+// 	}).then(function(user) {
+// 		user.createPost( {
+// 			title: 'Sexy',
+// 			body: 'Hello my name is Jezus'
+// 		})
+// 	}).then(function () {
+// 		var server = app.listen(3000, function () {
+// 			console.log('Example app listening on port: ' + server.address().port);
+// 		});
+// 	});
+// }, function (error) {
+// 	console.log('sync failed: ');
+// 	console.log(error);
+// });
+
 // ####### SERVER LISTEN TO PORT 3000 ########
 var server = app.listen(3000, function () {
-	console.log('User app listening on port: ' + server.address().port);
+	console.log('Blog app listening on port: ' + server.address().port);
 });

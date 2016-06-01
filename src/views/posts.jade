@@ -1,0 +1,17 @@
+extends layout
+block content
+	br
+	br
+	br
+	p display post her
+	br
+	h1 Drop a comment
+	form(name="message-form", id='form-message', action="/post-post", method="post")
+		div.input
+			span.label Title
+			input(type="text", id='title-message', name="titlePost")
+		div.input
+			span.label Body
+			input(type="textarea",style="width:250px;height:150px;" id='body-post', name="bodyPost")
+		div.actions
+			input(type="submit", value="upload post")

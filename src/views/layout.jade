@@ -1,11 +1,25 @@
 doctype html
 html
 	head
-		title= title
+		title= titleHead
 		link(rel='stylesheet', href='/style.css', type='text/css')
 		link(href='https://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet' type='text/css')
 		script(src="https://code.jquery.com/jquery-2.2.0.min.js")
 		script(src="index.js")
 	body
-		#content
-			block content
+		#navbar-fixed
+			#nav-wrapper
+				ul
+					li
+						a(class=['logo'], href='/') Blog Application
+						a(href='http://localhost:3000/profile') Profile
+						a(href='http://localhost:3000/create-post') CREATE post
+						a(href='http://localhost:3000/view-own-posts') view OWN posts
+						a(href='http://localhost:3000/view-all-posts') view ALL posts
+						a(href='http://localhost:3000/logout') log out
+		br
+		br
+		br
+		h2 Hi #{user.name}
+			#content
+				block content

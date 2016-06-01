@@ -1,0 +1,9 @@
+extends layout
+block content
+	h2 Create a Post
+	div.text4
+		form(name="message-form", id='form-message', action="/post-post", method="post")
+				textarea.title-post(name="titlePost", placeholder="WRITE YOUR TITLE HERE")
+				textarea.body-post(name="bodyPost", placeholder="THE BODY OF YOUR POST SHOULD BE HERE")
+				div.actions
+					input(type="submit", value="upload post")

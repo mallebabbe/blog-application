@@ -1,17 +1,13 @@
 extends layout
 
 block content
-	#navbar-fixed
-		#nav-wrapper
-			ul
-				li
-					a(class=['logo'], href='/') Blog Application
-					a(href='#create-post') create post
-					a(href='#view-own-posts') view own posts
-					a(href='#view-all-posts') view all posts
-					a(href='http://localhost:3000/logout') log out
 	br
 	br
-	br
-	h2= user.name
-	h3= user.email
+	form(name="searchPost", action="/searchresult", method="post")
+		div.text3
+			span.label Search Title
+			input(list='results', id='searchfield', type="text", name="Search", autocomplete='off')
+			datalist#results
+			div.actions
+				input(type="submit", value="Search")
+		div#displayname

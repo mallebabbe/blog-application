@@ -15,12 +15,14 @@ body {
     box-sizing: border-box;
 }
 p {
-    font-size: 1em;
+    font-size: .7em;
     padding: 0em 0em 0.2em 0.5em;
 }
 h1 {
     font-weight: 900;
-    
+}
+h2 {
+    font-size: 1.5em;
 }
 
 /* start header */
@@ -52,6 +54,7 @@ h1 {
 
 /* nav menu*/
 #nav-wrapper ul {
+    position: absolute;
     position: fixed;
     top: 0;
     left: 0;
@@ -69,10 +72,74 @@ h1 {
     padding: 1em 1.5em;
     text-decoration: none;
 }
-#nav-wrapper ul li a:hover {
+#nav-wrapper ul li a:hover, 
+#nav-wrapper ul li a:active {
     background-color: black;
     color: #00CC00;
 }
 a:hover { 
     background-color: yellow;
+}
+/*  login and register  */
+.register {
+    border: 3px solid yellow;
+}
+.login {
+    border: 3px solid purple;
+}
+#posts {
+    border-top: 3px solid yellow;
+    border-bottom: 3px solid yellow;
+}
+#single {
+    color: white;
+}
+#oneTitle {
+    color: yellow;
+    border-top: 2px solid yellow;
+}
+/* de form fields */
+.text4 {
+    width: 500px;
+    height: 450px;
+}
+.text3 {
+  background: yellow;
+  color: #ccc;
+  width: 200px;
+  padding: 6px 15px 6px 35px;
+  border-radius: 20px;
+  box-shadow: 0 1px 0 #ccc inset;
+  transition: 500ms all ease;
+  outline: 0;
+}
+.text3:hover {
+  width: 270px;
+}
+/* comments form on VIEW ALL and VIEW OWN POSTS */
+.textComment {
+  background: yellow;
+  color: #ccc;
+  width: 500px;
+  padding: 6px 15px 6px 35px;
+  border-radius: 20px;
+  box-shadow: 0 1px 0 #ccc inset;
+  transition: 500ms all ease;
+  outline: 0;
+}
+textarea.commentfield {
+    width: 400px;
+    height: 70px;
+}
+.textComment:hover {
+  width: 600px;
+}
+/* create post form */
+textarea.title-post {
+    width: 400px;
+    height: 50px;
+}
+textarea.body-post {
+    width: 400px;
+    height: 350px;
 }

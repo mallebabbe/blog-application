@@ -1,10 +1,10 @@
 doctype html
 html
 	head
-		title= title
-		link(rel='stylesheet', href='/style.css', type='text/css')
+		title= titleHead
 		link(href='https://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet' type='text/css')
 		script(src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
+		link(rel='stylesheet', href='/style.css', type='text/css')
 		script.
 			$(document).ready(function () {
 				$('#submit').click(function(event) {
@@ -23,49 +23,46 @@ html
 							a(class=['logo'], href='/') Blog Application
 							a(href='http://localhost:3000/profile') profile
 							a(href='http://localhost:3000/logout') log out
-			h2 Error message:
-			h2#error-message= message
+			br
+			br
+			br
+			h2 You are logged-in #{user.name}
 		else
 			#navbar-fixed
 				#nav-wrapper
 					ul
 						li
 							a(class=['logo'], href='/') Blog Application
-							a(href='http://localhost:3000/login') login
 			br
 			br
 			br
+			div.register
+				h2 Register here		
+				form(name="message-form", id='form-message', action="/create-user", method="post")
+					div.input
+						span.label 
+						input(type="text", id='username-register', placeholder="username", name="username")
+					div.input
+						span.label 
+						input(type="text", id='useremail-register', placeholder="email" name="useremail")
+					div.input
+						span.label 
+						input(type="password", id='userpassword-register', placeholder="SeCret_PassWord" name="userpassword")
+					div.actions
+						input(type="submit", value="register", id='submit')
 			br
-			h2 REGISTER here
-			br
-			form(action='/create-user' method='post')
-				label name
-				br
-				input#name(name='username' required)
-				br
-				label email
-				br
-				input#email(name='useremail' required)
-				br
-				label password
-				br
-				input#password(name='userpassword' required)
-				br
-				input(type='submit' value='register and login' id='submit')
-			br
-			br
-			h2 LOGIN here
-			br
-			form(action='/login-user' method='post')
-				label name
-				br
-				input#name(name='loginUserName' required)
-				br
-				label password
-				br
-				input#password(name='loginUserPassword' required)
-				br
-				input(type='submit' value='login' id='submit')
+			div.login
+				h2 Login here
+				form(name="message-form", id='form-message', action="/login-user", method="post")
+					div.input
+						span.label
+						input(type="text", id='username-login', name="loginUserName", placeholder="username")
+					div.input
+						span.label
+						input(type="password", id='useremail-login', name="loginUserPassword", placeholder="password")
+					div.actions
+						input(type="submit", value="login", id='submit')
 		br
-		h2 Error message:
 		h2#error-message= message
+		br
+		iframe(width="560" height="315" src="https://www.youtube.com/embed/vBNSIQGcHbM" frameborder="0" allowfullscreen)
