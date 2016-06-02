@@ -1,6 +1,6 @@
 extends layout
 block content
-	p #{user.name} likes to see his own online posts.
+	p #{user.name} likes to see his own posts.
 	#posts
 	each post in data 
 		#single
@@ -14,6 +14,7 @@ block content
 				textarea.commentfield(type="text", name="commentfield")
 				div.actions
 					input(type="submit", value="comment")
-				div#hiddeninput
-		each comment in post.comments
-			p #{comment.body}
+			.display-comments
+				each comment in post.comments
+					h5 author: #{comment.user.name}
+					p#ouwes #{comment.body}

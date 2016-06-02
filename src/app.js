@@ -141,7 +141,7 @@ app.get('/create-post', function (request, response) {
 // #### POST the BLOG POST
 app.post('/post-post', function (request, response) {
 	console.log("BLOGPOST on the way")
-	var restoredUser = User.build(request.session.user);
+	var restoredUser = request.session.user;
 	restoredUser.createPost({
 		title: request.body.titlePost,
 		body: request.body.bodyPost
