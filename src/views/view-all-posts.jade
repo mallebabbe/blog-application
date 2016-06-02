@@ -6,12 +6,12 @@ block content
 		#single
 			h2#oneTitle Title: #{post.title}
 			p#oneBody #{post.body}
-		form(name="commenPost", action="/commentPost", method="post")
+		form(name="commentPost", action="/commentPost", method="post")
 			div.textComment
 				span.label Leave Comment
 				textarea.commentfield(type="text", name="commentfield")
 				div.actions
 					input(type="submit", value="comment")
-		//- div#hiddeninput
-		//- 	each comment in comments
-		//- 		p {#comment.body}
+				div#hiddeninput
+		each comment in post.comments
+			p #{comment.body}

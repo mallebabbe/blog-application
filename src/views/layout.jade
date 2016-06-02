@@ -2,24 +2,71 @@ doctype html
 html
 	head
 		title= titleHead
-		link(rel='stylesheet', href='/style.css', type='text/css')
 		link(href='https://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet' type='text/css')
-		script(src="https://code.jquery.com/jquery-2.2.0.min.js")
-		script(src="index.js")
+		script(src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
+		link(rel='stylesheet', href='/style.css', type='text/css')
+		script.
+			$(document).ready(function () {
+				$('#submit').click(function(event) {
+					if($('#name').val().trim().length === 0 || $('#password').val().trim().length === 0) {
+						event.preventDefault();
+						$('#error-message').html("Your username or password is empty.");
+					}
+				});
+			});
 	body
-		#navbar-fixed
-			#nav-wrapper
-				ul
-					li
+		if user
+			#navbar-fixed
+				#nav-wrapper
+					ul
 						a(class=['logo'], href='/') Blog Application
 						a(href='http://localhost:3000/profile') Profile
 						a(href='http://localhost:3000/create-post') CREATE post
 						a(href='http://localhost:3000/view-own-posts') view OWN posts
 						a(href='http://localhost:3000/view-all-posts') view ALL posts
 						a(href='http://localhost:3000/logout') log out
-		br
-		br
-		br
-		h2 Hi #{user.name}
+			br
+			br
+			br
+			h2 You are #{user.name}
+			h2#error-message= message
 			#content
 				block content
+		else
+			#navbar-fixed
+				#nav-wrapper
+					ul
+						li
+							a(class=['logo'], href='/') Blog Application
+			br
+			br
+			br
+			div.register
+				h2 Register here		
+				form(name="message-form", id='form-message', action="/create-user", method="post")
+					div.input
+						span.label 
+						input(type="text", id='username-register', placeholder="username", name="username")
+					div.input
+						span.label 
+						input(type="text", id='useremail-register', placeholder="email" name="useremail")
+					div.input
+						span.label 
+						input(type="password", id='userpassword-register', placeholder="SeCret_PassWord" name="userpassword")
+					div.actions
+						input(type="submit", value="register", id='submit')
+			br
+			div.login
+				h2 Login here
+				form(name="message-form", id='form-message', action="/login-user", method="post")
+					div.input
+						span.label
+						input(type="text", id='username-login', name="loginUserName", placeholder="username")
+					div.input
+						span.label
+						input(type="password", id='useremail-login', name="loginUserPassword", placeholder="password")
+					div.actions
+						input(type="submit", value="login", id='submit')
+			br
+			br
+			h2#error-message= message

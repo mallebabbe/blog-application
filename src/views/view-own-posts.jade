@@ -6,9 +6,13 @@ block content
 		#single
 			h2#oneTitle Title: #{post.title}
 			p#oneBody #{post.body}
-		form(name="Comment", action="/commentOnPost", method="post")
-			div.text3
-				span.label Comment
-				input(id='commentfield', type="text", name="commentfield")
+		form(name="commentPost", action="/commentPost", method="post")
+			div.textComment
+				span.label Leave Comment
+				input(type="text", name="id",value="#{post.id}", hidden)
+				textarea.commentfield(type="text", name="commentfield")
 				div.actions
 					input(type="submit", value="comment")
+				div#hiddeninput
+		each comment in post.comments
+			p #{comment.body}

@@ -2,7 +2,7 @@ var Sequelize = require('sequelize');
 var express = require('express');
 var bodyParser = require('body-parser');
 var session = require('express-session');
-
+var Promise = require('promise');
 // ######### SET DB CONNECTION
 var sequelize = new Sequelize('blog', 'postgres', 'mysecretpassword', {
 	host: '192.168.99.100',
@@ -82,6 +82,7 @@ response.redirect('/');
 })
 // ##### LOGIN ##### FORM ON HOME-PAGE POST
 app.post('/login-user', bodyParser.urlencoded({extended: true}), function (request, response) {
+	console.log("Login has been sended")
 	User.findOne({
 		where: {
 			name: request.body.loginUserName
@@ -102,6 +103,7 @@ app.post('/login-user', bodyParser.urlencoded({extended: true}), function (reque
 
 // ###### LOG-OUT ######
 app.get('/logout', function (request, response) {
+	console.log("USER is LOGGED-OUT")	
 	request.session.destroy(function(error) {
 		if(error) {
 			throw error;
@@ -123,7 +125,7 @@ app.get('/profile', function (request, response) {
 		});
 	}
 });
-// #### CREATE POST ####
+// #### PAGE of CREATE POST ####
 app.get('/create-post', function (request, response) {
 	console.log("LANDED ON CREATE POST")
 	var user = request.session.user;
@@ -136,8 +138,9 @@ app.get('/create-post', function (request, response) {
 		});
 	}
 })
+// #### POST the BLOG POST
 app.post('/post-post', function (request, response) {
-	console.log("post on the way")
+	console.log("BLOGPOST on the way")
 	var restoredUser = User.build(request.session.user);
 	restoredUser.createPost({
 		title: request.body.titlePost,
@@ -148,39 +151,20 @@ app.post('/post-post', function (request, response) {
 })
 // #### VIEW ALL POSTS ####
 app.get('/view-all-posts', function (request, response) {
-	console.log("LANDED ON VIEW ALL")
-	var user = request.session.user;
-	
+	console.log("LANDED ON VIEW ALL POSTS")
+	var user = request.session.user;	
 	if (user === undefined) {
 		response.redirect('/?message=' + encodeURIComponent("Please log in to view your profile."));
+
 	} else {
-		Post.findAll().then(function (posts) {
-			var data = posts.map(function (post) {
-				return {
-					title: post.dataValues.title,
-					body: post.dataValues.body
-				};
-			})
-			
-
-			console.log("Page Gets Rendered");
-			
-
+		Post.findAll( { include:[User, Comment] } ).then(function (posts){
 			response.render('view-all-posts', {
 				titleHead: 'View All Posts',
-				data: data,
+				data: posts,
 				user: user
 			})
 		})
 	}
-
-
-
-// var restoredUser = User.build(request.session.user);
-// 	restoredUser.createComment({
-// 		title: request.body.titlePost,
-// 		body: request.body.bodyPost
-// 	})
 });
 
 
@@ -194,27 +178,24 @@ app.get('/view-own-posts', function (request, response) {
 	if (user === undefined) {
 		response.redirect('/?message=' + encodeURIComponent("Please log in to view your profile."));
 	} else {
-		Post.findAll({
+		Post.findAll({ 
 			where: {
 				userId: user.id
-			}			
-		}).then(function (posts) {
-			var data = posts.map(function (post) {
-				return {
-					title: post.dataValues.title,
-					body: post.dataValues.body
-				};
+			},	
+			include: [
+				{model: Comment, include: [
+					{model: User}
+				]}
+			]
+			}).then(function (posts) {
+				response.render('view-own-posts', {
+					titleHead: 'View OWN Posts',
+					data: posts,
+					user: user
+				})
 			})
-			console.log("printing results:");
-			console.log(data);
-			response.render('view-own-posts', {
-				titleHead: 'View OWN Posts',
-				data: data,
-				user: user
-			})
-		})
-	}
-})
+		}
+	})
 
 app.post('/commentPost', function (request, response) {
 	
@@ -286,7 +267,7 @@ app.post('/api', function ( req, res ){
 // 		password: "jeez"
 // 	}).then(function(user) {
 // 		user.createPost( {
-// 			title: 'Sexy',
+// 			title: 'Jezus is the Name',
 // 			body: 'Hello my name is Jezus'
 // 		})
 // 	}).then(function () {
