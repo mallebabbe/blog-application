@@ -157,7 +157,7 @@ app.get('/view-all-posts', function (request, response) {
 		response.redirect('/?message=' + encodeURIComponent("Please log in to view your profile."));
 
 	} else {
-		Post.findAll( { include:[User, Comment] } ).then(function (posts){
+		Post.findAll( { include:[User, {model: Comment, include: [User] }] } ).then(function (posts){
 			response.render('view-all-posts', {
 				titleHead: 'View All Posts',
 				data: posts,
@@ -196,65 +196,32 @@ app.get('/view-own-posts', function (request, response) {
 			})
 		}
 	})
-
-app.post('/commentPost', function (request, response) {
-	
+// ##### POST A COMMENT #####
+app.post('/commentPost', function(request, response){
 	console.log("COMMENT on the way")
-	console.log("user")
-	var restoredUser = User.build(request.session.user);
-	
-	restoredUser.createComment({
-		body: request.body.commentfield
-	})
-	
-	console.log("hello")
-	
-	response.redirect('/profile')
-
-})
-// #### SEARCH FOR SPECIFIC POST in DB ####
-app.post('/api', function ( req, res ){
-	
-	Post.findOne({
-// where:    you select a DB element that matches title:'birds are chirpy' 
-	where: {
-		title: request.body.Search
-	}
-	// now we have this message 
-}).then(function (post) {
-	post.update({
-		title: 'birds are REALLY chirpy',
-		body: 'for real yo'
-	});
-});
-	// var searchPost = req.body.searchPost.toLowerCase()
-	// console.log("post found : " + searchPost)
-
-	// var userMatch = {}
-	// var totalUsers = []
-
-	// jsonREADER.readJSON('./resources/users.json', function ( jsonData, name ) {
-	// 	console.log("Search string received" )
-
-	// 	for (var i = 0; i < jsonData.length; i++) {
-
-	// 		var achternaam = jsonData[i].lastname.toLowerCase()
-	// 		var voornaam = jsonData[i].firstname.toLowerCase()
-	// 		var fullName = voornaam + " " + achternaam
-	// 		letterMatchFirstName = voornaam.indexOf(searchName)
-	// 		letterMatchLastName = achternaam.indexOf(searchName)
-	// 		letterMatchFullName = fullName.indexOf(searchName)
-
-	// 	// console.log("Letters found : " + letterMatchFirstName)
-
-	// 		if(letterMatchFirstName != -1 || letterMatchLastName != -1 || letterMatchFullName != -1) {
-	// 			userMatch = jsonData[i]
-	// 			totalUsers.push(userMatch)
-	// 			// console.log("total name : " + userMatch)
-	// 		} 
-	// 	}
-	// 	res.send(totalUsers)
-	// })	
+	var user = request.session.user;
+	// var restoredUser = User.build(request.session.user);
+	console.log(user)
+    Promise.all([
+        Comment.create({
+            body: request.body.commentfield
+        }),
+        User.findOne({
+            where: {
+                id: request.session.user.id
+            }
+        }),
+        Post.findOne({
+            where: {
+                id: request.body.id
+            }
+        })
+    ]).then(function(allofthem){
+            allofthem[0].setUser(allofthem[1])
+            allofthem[0].setPost(allofthem[2])
+    }).then(function(){
+        response.redirect(request.body.origin)
+    })
 })
 
 // ########### END ROUTE SECTION #############

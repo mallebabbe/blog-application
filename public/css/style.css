@@ -126,13 +126,25 @@ a:hover {
   box-shadow: 0 1px 0 #ccc inset;
   transition: 500ms all ease;
   outline: 0;
+  margin-bottom: 1em;
+  margin-top: 1em;
 }
 textarea.commentfield {
     width: 400px;
     height: 70px;
 }
+/*posted comments display*/
+.display-comments {
+  color: white;
+  padding: 1em 0 1em .5em;
+  margin-bottom: .5em;
+  margin-top: .5em;
+  border-top: 1px solid white;
+}
+
+/**/
 .textComment:hover {
-  width: 600px;
+  width: 550px;
 }
 /* create post form */
 textarea.title-post {

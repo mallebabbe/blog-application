@@ -9,9 +9,12 @@ block content
 		form(name="commentPost", action="/commentPost", method="post")
 			div.textComment
 				span.label Leave Comment
+				input(type="text", name="id",value="#{post.id}", hidden)
+				input(type="text", name="origin",value="/view-all-posts", hidden)
 				textarea.commentfield(type="text", name="commentfield")
 				div.actions
 					input(type="submit", value="comment")
-				div#hiddeninput
-		each comment in post.comments
-			p #{comment.body}
+			.display-comments
+				each comment in post.comments
+					h5 author: #{comment.user.name}
+					p#ouwes #{comment.body}

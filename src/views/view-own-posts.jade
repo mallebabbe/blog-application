@@ -10,6 +10,7 @@ block content
 			div.textComment
 				span.label Leave Comment
 				input(type="text", name="id",value="#{post.id}", hidden)
+				input(type="text", name="origin",value="/view-own-posts", hidden)
 				textarea.commentfield(type="text", name="commentfield")
 				div.actions
 					input(type="submit", value="comment")
