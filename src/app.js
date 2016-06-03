@@ -7,10 +7,10 @@ var Promise = require('promise');
 var sequelize = new Sequelize('blog', process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, {
 
 //note: to make connction to the DB set IP adres
-	// host: '192.168.99.100',
+	host: '192.168.99.100',
 // note: port changes everytime I restart Docker
-	// port:'32768', 
-	host:'localhost',
+	port:'32768', 
+	// host:'localhost',
 	dialect: 'postgres'
 });
 
@@ -83,6 +83,7 @@ User.create({
 console.log("Registration for " + request.body.username + " succeded")
 response.redirect('/');
 })
+
 // ##### LOGIN ##### FORM ON HOME-PAGE POST
 app.post('/login-user', bodyParser.urlencoded({extended: true}), function (request, response) {
 	console.log("Login has been sended")
@@ -152,6 +153,42 @@ app.post('/post-post', function (request, response) {
 	
 	response.redirect('/view-own-posts')
 })
+
+// ###### VIEW SPECIFIC POST ######
+
+app.get('/singlepost/:id', function (request, response) {
+	var requestParameters = request.params;
+	var user = request.session.user;
+	// console.log(requestParameters)
+	// console.log(requestParameters.id)
+	
+	console.log("request param : ")
+
+
+
+	if (user === undefined) {
+		response.redirect('/?message=' + encodeURIComponent("Please log in to view your profile."));
+	} else {
+		Post.findOne({ 
+			where: {
+				id: request.params.id
+			},	
+			include: [
+				{model: Comment, include: [
+					{model: User}
+				]}
+			]
+			}).then(function (post) {
+				console.log(post)
+				response.render('singlepost', {
+					titleHead: 'Single Post',
+					user: user,
+					post: post
+				})
+			})
+		}
+});
+
 // #### VIEW ALL POSTS ####
 app.get('/view-all-posts', function (request, response) {
 	console.log("LANDED ON VIEW ALL POSTS")
@@ -175,7 +212,6 @@ app.get('/view-all-posts', function (request, response) {
 app.get('/view-own-posts', function (request, response) {
 	console.log("LANDED ON VIEW OWN")
 	var user = request.session.user;
-	console.log(user)
 	if (user === undefined) {
 		response.redirect('/?message=' + encodeURIComponent("Please log in to view your profile."));
 	} else {

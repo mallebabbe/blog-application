@@ -31,22 +31,14 @@ h3 {
 
 /* start header */
 
-#navbar-fixed {
-  position: absolute;
-  position: fixed;
+.epic-nav {
   background-color: #00CC00;
-  width: 100%;
-
+  border: none;
 }
 
-#nav-wrapper {
+.super-nav {
   color: black;
-  padding-top: 1em;
-  padding: 1em 0 1em .5em;
-  font-weight: 1100;
   font-family: 'Orbitron', sans-serif;
-  height: 3em;
-  width: 100%
 }
 #logo {
   font-size: 2em; 
@@ -57,24 +49,25 @@ h3 {
 }
 
 /* nav menu*/
-
-#nav-wrapper ul li {
-  display: inline;
+.navbar-default .navbar-nav > li > a {
+    color: #000;
 }
 
-#nav-wrapper ul li a {
-  background-color: #00CC00;
-  color: black;
-  padding: 1em 1.5em;
-  text-decoration: none;
-}
-#nav-wrapper ul li a:hover {
-  background-color: black;
+.navbar-default .navbar-nav > li > a:hover {
+  background-color: #000;
   color: #00CC00;
 }
+/*.navbar-default .navbar-nav > li > a:focus {
+  background-color: #000;
+  color: #00CC00;
+}*/
 a:hover { 
-  background-color: yellow;
+  text-decoration: none;
+  background-color: #00CC00;
+  color: #000;
 }
+
+
 /*  login and register  */
 .register {
   border: 3px solid #00CC00;
@@ -87,7 +80,7 @@ a:hover {
   color: white;
 }
 
-h2#oneTitle {
+h2.oneTitle {
   color: yellow;
   border-top: 2px solid #00CC00;
   padding: 1em 0 .5em .5em;
@@ -128,10 +121,6 @@ textarea.commentfield {
   padding: 1em 0 2em 1em;
 }
 
-/**/
-.textComment:hover {
-  width: 550px;
-}
 /* create post form */
 textarea.title-post {
   width: 400px;

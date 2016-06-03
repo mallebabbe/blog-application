@@ -4,18 +4,5 @@ block content
 		h1 This page displays all your own posts #{user.name}.
 	each post in data 
 		#single
-			h2#oneTitle Title: #{post.title}
-			p#oneBody #{post.body}
-		form(name="commentPost", action="/commentPost", method="post")
-			div.textComment
-				span.label Leave Comment
-				input(type="text", name="id",value="#{post.id}", hidden)
-				input(type="text", name="origin",value="/view-own-posts", hidden)
-				textarea.commentfield(type="text", name="commentfield")
-				div.actions
-					input(type="submit", value="comment")
-			.display-comments
-				h3 Comments for: #{post.title} 
-				each comment in post.comments
-					h5 author: #{comment.user.name}
-					p#ouwes #{comment.body}
+			h2.oneTitle 
+				a(href='/singlepost/#{post.id}') Title: #{post.title}

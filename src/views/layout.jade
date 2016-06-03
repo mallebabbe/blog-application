@@ -2,6 +2,7 @@ doctype html
 html
 	head
 		title= titleHead
+		link(rel='stylesheet', href='/bootstrap.css', type='text/css')
 		link(href='https://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet' type='text/css')
 		script(src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
 		link(rel='stylesheet', href='/style.css', type='text/css')
@@ -16,31 +17,29 @@ html
 			});
 	body
 		if user
-			#navbar-fixed
-				#nav-wrapper
-					ul
+			nav.navbar.navbar-default.epic-nav
+				.container-fluid
+					.navbar-header
+						a.navbar-brand(class=['logo'], href='/') Blog Application
+					ul.nav.navbar-nav.super-nav
 						li
-							a(class=['logo'], href='/') Blog Application
 							a(href='http://localhost:3000/profile') Profile
+						li
 							a(href='http://localhost:3000/create-post') CREATE post
-							a(href='http://localhost:3000/view-own-posts') view OWN posts
-							a(href='http://localhost:3000/view-all-posts') view ALL posts
+						li
+							a(href='http://localhost:3000/view-own-posts') OWN posts
+						li
+							a(href='http://localhost:3000/view-all-posts') ALL posts
+						li
 							a(href='http://localhost:3000/logout') log out
-			br
-			br
-			br
 			h2#error-message= message
 			#content
 				block content
 		else
-			#navbar-fixed
-				#nav-wrapper
-					ul
-						li
-							a(class=['logo'], href='/') Blog Application
-			br
-			br
-			br
+			nav.navbar.navbar-default.epic-nav
+							.container-fluid
+								.navbar-header
+									a.navbar-brand(class=['logo'], href='/') Blog Application
 			div.register
 				h2 Register here		
 				form(name="message-form", id='form-message', action="/create-user", method="post")
@@ -67,6 +66,5 @@ html
 						input(type="password", id='useremail-login', name="loginUserPassword", placeholder="password")
 					div.actions
 						input(type="submit", value="login", id='submit')
-			br
-			br
+
 			h2#error-message= message

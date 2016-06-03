@@ -1,3 +1,3 @@
 # blog-application
 
-# see gameplan.txt for my way of thinking
+see gameplan.txt for the structure
