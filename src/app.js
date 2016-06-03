@@ -7,10 +7,10 @@ var Promise = require('promise');
 var sequelize = new Sequelize('blog', process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, {
 
 //note: to make connction to the DB set IP adres
-	host: '192.168.99.100',
+	// host: '192.168.99.100',
 // note: port changes everytime I restart Docker
-	port:'32768', 
-	// host:'localhost',
+	// port:'32768', 
+	host:'localhost',
 	dialect: 'postgres'
 });
 
