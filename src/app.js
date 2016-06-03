@@ -4,11 +4,14 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var Promise = require('promise');
 // ######### SET DB CONNECTION
-var sequelize = new Sequelize('blog', 'postgres', 'mysecretpassword', {
-	host: '192.168.99.100',
+var sequelize = new Sequelize('blog', process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, {
+
+//note: to make connction to the DB set IP adres
+	// host: '192.168.99.100',
 // note: port changes everytime I restart Docker
-port:'32768', 
-dialect: 'postgres'
+	// port:'32768', 
+	host:'localhost',
+	dialect: 'postgres'
 });
 
 // ######### SET DB TABLES ########## 
