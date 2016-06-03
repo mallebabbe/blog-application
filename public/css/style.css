@@ -1,127 +1,109 @@
 body {
-/*    background: url('../images/') repeat scroll top left;*/
-    margin: 0;
-    padding: 0;
-    font-family: Helvetica, Arial, sans-serif;
-    color: #00CC00;
-    background-color: black;
-        letter-spacing: 1px;
+  /*    background: url('../images/') repeat scroll top left;*/
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  font-family: Helvetica, Arial, sans-serif;
+  color: #00CC00;
+  background-color: black;
+  letter-spacing: 1px;
 }
 * {
-    padding: 0px;
-    margin: 0px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
+  padding: 0px;
+  margin: 0px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 p {
-    font-size: .7em;
-    padding: 0em 0em 0.2em 0.5em;
+  font-size: .9em;
+  padding: 0em 0em 0.2em 0.5em;
 }
 h1 {
-    font-weight: 900;
+  font-size: 2em;
 }
 h2 {
-    font-size: 1.5em;
+  font-size: 1.5em;
+}
+h3 {
+
 }
 
 /* start header */
 
 #navbar-fixed {
-    position: absolute;
+  position: absolute;
+  position: fixed;
+  background-color: #00CC00;
+  width: 100%;
+
 }
 
 #nav-wrapper {
-    position: fixed;
-    background-color: #00CC00;
-    color: black;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 50px;
-    padding-top: .5em;
-    font-weight: 1100;
-    font-family: 'Orbitron', sans-serif;
-
+  color: black;
+  padding-top: 1em;
+  padding: 1em 0 1em .5em;
+  font-weight: 1100;
+  font-family: 'Orbitron', sans-serif;
+  height: 3em;
+  width: 100%
 }
 #logo {
-    font-size: 2em; 
-    text-align: center;
-    padding: .5em;
-    text-decoration: none;
-    color: black;
+  font-size: 2em; 
+  text-align: center;
+  padding: .5em;
+  text-decoration: none;
+  color: black;
 }
 
 /* nav menu*/
-#nav-wrapper ul {
-    position: absolute;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 50px;
-    padding-top: 1em;
-}
 
 #nav-wrapper ul li {
-    display: inline;
+  display: inline;
 }
 
 #nav-wrapper ul li a {
-    background-color: #00CC00;
-    color: black;
-    padding: 1em 1.5em;
-    text-decoration: none;
+  background-color: #00CC00;
+  color: black;
+  padding: 1em 1.5em;
+  text-decoration: none;
 }
-#nav-wrapper ul li a:hover, 
-#nav-wrapper ul li a:active {
-    background-color: black;
-    color: #00CC00;
+#nav-wrapper ul li a:hover {
+  background-color: black;
+  color: #00CC00;
 }
 a:hover { 
-    background-color: yellow;
+  background-color: yellow;
 }
 /*  login and register  */
 .register {
-    border: 3px solid yellow;
+  border: 3px solid #00CC00;
 }
 .login {
-    border: 3px solid purple;
+  border: 3px solid #00CC00;
 }
-#posts {
-    border-top: 3px solid yellow;
-    border-bottom: 3px solid yellow;
-}
+
 #single {
-    color: white;
+  color: white;
 }
-#oneTitle {
-    color: yellow;
-    border-top: 2px solid yellow;
+
+h2#oneTitle {
+  color: yellow;
+  border-top: 2px solid #00CC00;
+  padding: 1em 0 .5em .5em;
 }
 /* de form fields */
-.text4 {
-    width: 500px;
-    height: 450px;
+.createPostForm {
+  width: 500px;
+  height: 450px;
 }
-.text3 {
-  background: yellow;
-  color: #ccc;
-  width: 200px;
-  padding: 6px 15px 6px 35px;
-  border-radius: 20px;
-  box-shadow: 0 1px 0 #ccc inset;
-  transition: 500ms all ease;
-  outline: 0;
-}
-.text3:hover {
-  width: 270px;
-}
+
 /* comments form on VIEW ALL and VIEW OWN POSTS */
 .textComment {
-  background: yellow;
-  color: #ccc;
+  background: #00CC00;
+  color: #000;
   width: 500px;
-  padding: 6px 15px 6px 35px;
+  padding: 3px 10px 3px 25px;
   border-radius: 20px;
   box-shadow: 0 1px 0 #ccc inset;
   transition: 500ms all ease;
@@ -130,8 +112,8 @@ a:hover {
   margin-top: 1em;
 }
 textarea.commentfield {
-    width: 400px;
-    height: 70px;
+  width: 400px;
+  height: 70px;
 }
 /*posted comments display*/
 .display-comments {
@@ -141,6 +123,10 @@ textarea.commentfield {
   margin-top: .5em;
   border-top: 1px solid white;
 }
+/*makes the first h1 on the view all and view own posts page.*/
+.titlePage {
+  padding: 1em 0 2em 1em;
+}
 
 /**/
 .textComment:hover {
@@ -148,10 +134,10 @@ textarea.commentfield {
 }
 /* create post form */
 textarea.title-post {
-    width: 400px;
-    height: 50px;
+  width: 400px;
+  height: 50px;
 }
 textarea.body-post {
-    width: 400px;
-    height: 350px;
+  width: 400px;
+  height: 350px;
 }

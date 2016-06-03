@@ -1,7 +1,7 @@
 extends layout
 block content
-	p #{user.name} likes to see his own posts.
-	#posts
+	div.titlePage
+		h1 This page displays all your own posts #{user.name}.
 	each post in data 
 		#single
 			h2#oneTitle Title: #{post.title}
@@ -15,6 +15,7 @@ block content
 				div.actions
 					input(type="submit", value="comment")
 			.display-comments
+				h3 Comments for: #{post.title} 
 				each comment in post.comments
 					h5 author: #{comment.user.name}
 					p#ouwes #{comment.body}

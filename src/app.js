@@ -141,13 +141,13 @@ app.get('/create-post', function (request, response) {
 // #### POST the BLOG POST
 app.post('/post-post', function (request, response) {
 	console.log("BLOGPOST on the way")
-	var restoredUser = request.session.user;
+	var restoredUser = User.build(request.session.user)
 	restoredUser.createPost({
 		title: request.body.titlePost,
 		body: request.body.bodyPost
 	})
 	
-	response.redirect('/profile')
+	response.redirect('/view-own-posts')
 })
 // #### VIEW ALL POSTS ####
 app.get('/view-all-posts', function (request, response) {
@@ -171,9 +171,7 @@ app.get('/view-all-posts', function (request, response) {
 // #### VIEW OWN POSTS ####
 app.get('/view-own-posts', function (request, response) {
 	console.log("LANDED ON VIEW OWN")
-
 	var user = request.session.user;
-
 	console.log(user)
 	if (user === undefined) {
 		response.redirect('/?message=' + encodeURIComponent("Please log in to view your profile."));
@@ -188,6 +186,7 @@ app.get('/view-own-posts', function (request, response) {
 				]}
 			]
 			}).then(function (posts) {
+				console.log(posts)
 				response.render('view-own-posts', {
 					titleHead: 'View OWN Posts',
 					data: posts,

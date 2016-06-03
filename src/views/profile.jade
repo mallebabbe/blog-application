@@ -1,13 +1,8 @@
 extends layout
 
 block content
-	br
-	br
-	form(name="searchPost", action="/searchresult", method="post")
-		div.text3
-			span.label Search Title
-			input(list='results', id='searchfield', type="text", name="Search", autocomplete='off')
-			datalist#results
-			div.actions
-				input(type="submit", value="Search")
-		div#displayname
+	h1 Hi  #{user.name}. How are you my friend?
+	h3 #{user.name}, you are on your profile page.
+	
+
+
