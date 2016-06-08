@@ -3,18 +3,20 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var Promise = require('promise');
+var bcrypt = require('bcrypt')
 // ######### SET DB CONNECTION
 var sequelize = new Sequelize('blog', process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, {
 
 //note: to make connction to the DB set IP adres
-	// host: '192.168.99.100',
+	host: '192.168.99.100',
 // note: port changes everytime I restart Docker
-	// port:'32768', 
-	host:'localhost',
+	port:'32773', 
+	// host:'localhost',
 	dialect: 'postgres'
 });
 
 // ######### SET DB TABLES ########## 
+
 var User = sequelize.define('users', {
 	name: Sequelize.STRING,
 	email: Sequelize.STRING,
@@ -61,7 +63,6 @@ app.use(session({
 }));
 
 // ######## ROUTES ########
-
 // ###### INDEX ######
 // GET HOME-PAGE
 app.get('/', function (request, response) {
@@ -75,11 +76,17 @@ app.get('/', function (request, response) {
 app.post('/create-user', function (request, response) {
 // take the input fields from the register form and save it to the DB as new user
 console.log("Create user : " + request.body.username)
-User.create({
-	name: request.body.username,
-	email: request.body.useremail,
-	password: request.body.userpassword
-})
+bcrypt.hash(request.body.userpassword, 9, function(err, hash) {
+			if (err) {
+				return err
+			} else {
+				User.create({
+				name: request.body.username,
+				email: request.body.useremail,
+				password: hash
+				})
+			}
+		})
 console.log("Registration for " + request.body.username + " succeded")
 response.redirect('/');
 })
@@ -87,20 +94,28 @@ response.redirect('/');
 // ##### LOGIN ##### FORM ON HOME-PAGE POST
 app.post('/login-user', bodyParser.urlencoded({extended: true}), function (request, response) {
 	console.log("Login has been sended")
+
 	User.findOne({
 		where: {
 			name: request.body.loginUserName
 		}
 	}).then(function (user) {
-		console.log("Login match made for " + request.body.loginUserName)
-		if (user !== null && request.body.loginUserPassword === user.password) {
-			request.session.user = user;
-			response.redirect('/profile');
-		} else {
-			response.redirect('/?message=' + encodeURIComponent("TRIED LOGIN -> Invalid email or password."));
-		}
+		console.log(user.password)
+		console.log("Login match made for " + user.name)
+		bcrypt.compare(request.body.loginUserPassword, user.password, function (err, res) {
+			if (err) {
+				console.log(err)
+			} else {
+				if (user !== null && res == true) {
+					request.session.user = user;
+					response.redirect('/profile');
+				} else {
+					response.redirect('/?message=' + encodeURIComponent("TRIED LOGIN => Invalid email or password."));
+				}
+			}
+	});
 	}, function (error) {
-		response.redirect('/?message=' + encodeURIComponent("Error -> Invalid email or password."));
+		response.redirect('/?message=' + encodeURIComponent("Error => Invalid email or password."));
 	});
 });
 
