@@ -6,11 +6,9 @@ var Promise = require('promise');
 var bcrypt = require('bcrypt')
 // ######### SET DB CONNECTION
 var sequelize = new Sequelize('blog', process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, {
-
 //note: to make connction to the DB set IP adres
 	host: '192.168.99.100',
-// note: port changes everytime I restart Docker
-	port:'32773', 
+	port:'32771', 
 	// host:'localhost',
 	dialect: 'postgres'
 });
@@ -39,9 +37,10 @@ Comment.belongsTo(User)
 Comment.belongsTo(Post)
 
 // ######### END TABLE CONNECTIONS ########
-// sequelize.sync({force: true}).then(function( ){
-
+// sequelize.sync({force: false}).then(function( ){
+// 	console.log("synced DB")
 // })
+
 // ###### EXPRESS INSTANCE ######
 var app = express();
 
@@ -100,7 +99,6 @@ app.post('/login-user', bodyParser.urlencoded({extended: true}), function (reque
 			name: request.body.loginUserName
 		}
 	}).then(function (user) {
-		console.log(user.password)
 		console.log("Login match made for " + user.name)
 		bcrypt.compare(request.body.loginUserPassword, user.password, function (err, res) {
 			if (err) {
@@ -301,6 +299,10 @@ app.post('/commentPost', function(request, response){
 // });
 
 // ####### SERVER LISTEN TO PORT 3000 ########
-var server = app.listen(3000, function () {
-	console.log('Blog app listening on port: ' + server.address().port);
-});
+sequelize.sync({force: true}).then(function( ){
+	console.log("synced DB")
+	var server = app.listen(3000, function () {
+		console.log('Blog app listening on port: ' + server.address().port);
+	});
+})
+
