@@ -13,7 +13,7 @@ and when logged in you can:
 # Requirements
 - Postgres DB
 - npm install:
-	"dependencies": {
+-	"dependencies": {
 		"bcrypt": "^0.8.6",
 		"body-parser": "^1.15.1",
 		"express": "^4.13.4",
@@ -27,10 +27,10 @@ and when logged in you can:
 	}
 
 # SETUP
-1 do npm install
-2 in src/app.js change the DB variables to connect to your own DB line:7
-4 check if set force:true line:307 to create the tables in your Postgress DB
-3 app is listening to port 3000
+- do npm install
+- in src/app.js change the DB variables to connect to your own DB line:7
+- check if set force:true line:307 to create the tables in your Postgress DB
+- app is listening to port 3000
 
 
 See gameplan.txt for the DB table connections
