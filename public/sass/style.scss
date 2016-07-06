@@ -6,77 +6,90 @@ body {
   font-family: Helvetica, Arial, sans-serif;
   color: #00CC00;
   background-color: black;
-  letter-spacing: 1px; }
-
+  letter-spacing: 1px;
+}
 * {
   padding: 0px;
   margin: 0px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
-  box-sizing: border-box; }
-
+  box-sizing: border-box;
+}
 p {
   font-size: .9em;
-  padding: 0em 0em 0.2em 0.5em; }
-
+  padding: 0em 0em 0.2em 0.5em;
+}
 h1 {
-  font-size: 2em; }
-
+  font-size: 2em;
+}
 h2 {
-  font-size: 1.5em; }
+  font-size: 1.5em;
+}
+h3 {
+
+}
 
 /* start header */
+
 .epic-nav {
   background-color: #00CC00;
-  border: none; }
+  border: none;
+}
 
 .super-nav {
   color: black;
-  font-family: 'Orbitron', sans-serif; }
-
+  font-family: 'Orbitron', sans-serif;
+}
 #logo {
-  font-size: 2em;
+  font-size: 2em; 
   text-align: center;
   padding: .5em;
   text-decoration: none;
-  color: black; }
+  color: black;
+}
 
 /* nav menu*/
 .navbar-default .navbar-nav > li > a {
-  color: #000; }
+    color: #000;
+}
 
 .navbar-default .navbar-nav > li > a:hover {
   background-color: #000;
-  color: #00CC00; }
-
+  color: #00CC00;
+}
 /*.navbar-default .navbar-nav > li > a:focus {
   background-color: #000;
   color: #00CC00;
 }*/
-a:hover {
+a:hover { 
   text-decoration: none;
   background-color: #00CC00;
-  color: #000; }
+  color: #000;
+}
+
 
 /*  login and register  */
 .register {
-  border: 3px solid #00CC00; }
-
+  border: 3px solid #00CC00;
+}
 .login {
-  border: 3px solid #00CC00; }
+  border: 3px solid #00CC00;
+}
 
 #single {
-  color: white; }
+  color: white;
+}
 
 h2.oneTitle {
   color: yellow;
   border-top: 2px solid #00CC00;
-  padding: 1em 0 .5em .5em; }
-
+  padding: 1em 0 .5em .5em;
+}
 /* de form fields */
 .createPostForm {
   width: 500px;
-  height: 450px; }
+  height: 450px;
+}
 
 /* comments form on VIEW ALL and VIEW OWN POSTS */
 .textComment {
@@ -89,29 +102,31 @@ h2.oneTitle {
   transition: 500ms all ease;
   outline: 0;
   margin-bottom: 1em;
-  margin-top: 1em; }
-
+  margin-top: 1em;
+}
 textarea.commentfield {
   width: 400px;
-  height: 70px; }
-
+  height: 70px;
+}
 /*posted comments display*/
 .display-comments {
   color: white;
   padding: 1em 0 1em .5em;
   margin-bottom: .5em;
   margin-top: .5em;
-  border-top: 1px solid white; }
-
+  border-top: 1px solid white;
+}
 /*makes the first h1 on the view all and view own posts page.*/
 .titlePage {
-  padding: 1em 0 2em 1em; }
+  padding: 1em 0 2em 1em;
+}
 
 /* create post form */
 textarea.title-post {
   width: 400px;
-  height: 50px; }
-
+  height: 50px;
+}
 textarea.body-post {
   width: 400px;
-  height: 350px; }
+  height: 350px;
+}

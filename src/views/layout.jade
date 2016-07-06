@@ -2,10 +2,10 @@ doctype html
 html
 	head
 		title= titleHead
-		link(rel='stylesheet', href='/bootstrap.css', type='text/css')
+		link(rel='stylesheet', href='/css/bootstrap.css', type='text/css')
 		link(href='https://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet' type='text/css')
 		script(src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
-		link(rel='stylesheet', href='/style.css', type='text/css')
+		link(rel='stylesheet', href='/css/style.css', type='text/css')
 		script.
 			$(document).ready(function () {
 				$('#submit').click(function(event) {
@@ -23,15 +23,15 @@ html
 						a.navbar-brand(class=['logo'], href='/') Blog Application
 					ul.nav.navbar-nav.super-nav
 						li
-							a(href='http://localhost:3000/profile') Profile
+							a(href='/profile') Profile
 						li
-							a(href='http://localhost:3000/create-post') CREATE post
+							a(href='/create-post') CREATE post
 						li
-							a(href='http://localhost:3000/view-own-posts') OWN posts
+							a(href='/view-own-posts') OWN posts
 						li
-							a(href='http://localhost:3000/view-all-posts') ALL posts
+							a(href='/view-all-posts') ALL posts
 						li
-							a(href='http://localhost:3000/logout') log out
+							a(href='/logout') log out
 			h2#error-message= message
 			#content
 				block content
